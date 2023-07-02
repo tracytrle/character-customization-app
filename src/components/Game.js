@@ -1,13 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Images from "./Images.js";
-
-// const ImageParts = {
-//   // Define your image paths here
-//   body1: "character/body/1.png",
-//   body2: "character/body/2.png",
-//   head1: "character/head/1.png",
-//   head2: "character/head/2.png",
-// };
+import { allParts, total, getAllPart } from "./Items.js";
 
 // const NavLinks = ["Clothes", "Hair", "Face", "Accessories"];
 // const PartList = [
@@ -22,16 +15,26 @@ function Game() {
   const [activeLink, setActiveLink] = useState("");
   const [buttons, setButtons] = useState([]);
   const [imageParts, setImageParts] = useState([]);
+  const [showPart, setShowPart] = useState("");
+  const [partItems, setPartItems] = useState(allParts);
+
+  useEffect(() => {
+    getAllPart();
+    console.log("print allpart: ", partItems);
+  }, [partItems]);
+
+  const temp = getAllPart();
+  console.log("print partItems: ", partItems);
 
   function handleNavClick(link) {
     setActiveLink(link);
     let newButtons = [];
     if (link === "Face") {
-      newButtons = ["mouths", "noses", "eyes", "facial_hair", "eyebrows"];
+      newButtons = ["Mouths", "Noses", "Eyes", "Facial_hair", "Eyebrows"];
     } else if (link === "Hairs") {
       newButtons = ["Hair_1", "Hair_2", "Hair_3", "Hair_4"];
     } else if (link === "Clothes") {
-      newButtons = ["layer_1", "layer_2", "layer_3"];
+      newButtons = ["Layer_1", "Layer_2", "Layer_3"];
     } else if (link === "Accessories") {
       newButtons = [
         "Earrings_1",
@@ -54,6 +57,7 @@ function Game() {
   }
 
   function handlePartList(button) {
+    setShowPart(button);
     setImageParts([]);
     console.log("print handlePartList button: ", button);
     const newImageParts = [];
@@ -61,15 +65,20 @@ function Game() {
     let size = 0;
     let origin = "";
     const png = ".png";
-    let partName = "";
+    let partName = `${button}_`;
     let link = "";
     let key = "";
-    if (activeLink === "Body") {
+    let z_idx = 0;
+
+    if (activeLink === "Body" && button === "Body") {
       size = 17;
       origin = "character/body/";
+      z_idx = 0;
     } else if (activeLink === "Hairs") {
       size = 20;
       origin = "character/hair/";
+      z_idx = 6;
+      partName = "Hair_";
       if (button === "Hair_1") {
         start = 0;
       } else if (button === "Hair_2") {
@@ -82,32 +91,30 @@ function Game() {
       }
     } else if (activeLink === "Clothes") {
       origin = "character/clothes/";
-      size = button === "layer_3" ? 8 : 5;
-      partName = `_${button}_`;
+      size = button === "layer_3" ? 9 : 5;
       origin = `${origin}${button}/`;
+      z_idx = 2;
     } else if (activeLink === "Accessories") {
+      z_idx = 5;
       if (button === "Earrings_1" || button === "Earrings_2") {
-        partName = "_Earrings";
+        partName = "Earrings_";
         size = 16;
         origin = "character/accessories/earrings/";
         start = button === "Earrings_1" ? 0 : 16;
       } else if (button === "Glasses") {
-        partName = "_Glasses";
         size = 17;
         origin = "character/accessories/glasses/";
       } else if (button === "Hats_1" || button === "Hats_2") {
-        partName = "_Hats";
+        partName = "Hat_";
         size = 14;
         origin = "character/accessories/hats/";
         start = button === "Hats_1" ? 0 : 14;
       } else if (button === "Neckwear") {
-        partName = "_Neckwear";
         size = 18;
         origin = "character/accessories/neckwear/";
       }
     } else if (activeLink === "Face") {
-      // { Face: ["mouths", "nose", "eyes", "facial_hair", "eyebrows"] },
-
+      z_idx = 4;
       if (button === "mouths") {
         origin = "character/mouths/";
         size = 24;
@@ -124,13 +131,10 @@ function Game() {
         origin = "character/eyebrows/";
         size = 15;
       }
-      partName = `_${button}`;
     }
-
     console.log("print size: ", size);
     for (let index = start; index < size + start; index++) {
-      // part.key = `${activeLink}${index + 1}`;
-      key = `${activeLink}${partName}${index + 1}`;
+      key = `${partName}${index + 1}`;
       link = `${origin}${index + 1}${png}`;
       let part = {
         key: link,
@@ -139,89 +143,117 @@ function Game() {
       console.log("print part: ", link);
 
       newImageParts.push(part);
+      // if (button === "Body") {
+      //   const eachBody = {
+      //     id: `${key}`,
+      //     src: `${link}`,
+      //     z: `${z_idx}`,
+      //   };
+      //   const newBody = { ...total };
+
+      //   setTotal((prevState) => ({
+      //     ...prevState,
+      //     Body: newBody,
+      //   }));
+      // }
     }
+    console.log("print total: ", total);
 
     setImageParts(newImageParts);
   }
 
   return (
-    <div id="root">
-      <div className="container">
-        <div className="App">
-          <div className="nav-link">
-            <ul>
-              <li
-                onChange={handleOnChange}
-                className={activeLink === "Body" ? "active" : ""}
-                onClick={() => handleNavClick("Body")}
-              >
-                Body
-              </li>
-              <li
-                onChange={handleOnChange}
-                className={activeLink === "Face" ? "active" : ""}
-                onClick={() => handleNavClick("Face")}
-              >
-                Face
-              </li>
-              <li
-                onChange={handleOnChange}
-                className={activeLink === "Hairs" ? "active" : ""}
-                onClick={() => handleNavClick("Hairs")}
-              >
-                Hairs
-              </li>
-              <li
-                onChange={handleOnChange}
-                className={activeLink === "Clothes" ? "active" : ""}
-                onClick={() => handleNavClick("Clothes")}
-              >
-                Clothes
-              </li>
-              <li
-                className={activeLink === "Accessories" ? "active" : ""}
-                onClick={() => handleNavClick("Accessories")}
-              >
-                Accessories
-              </li>
-            </ul>
-          </div>
-          <div className="avatar-group">
-            <div className="showing-avatar">
-              <div className="avatar-wrapper">
-                <div className="avatar"></div>
-                <div className="text-center">
-                  <button className="button">Randomize!</button>
-                </div>
-              </div>
+    <div className="App">
+      <div className="nav-link">
+        <ul>
+          <li
+            onChange={handleOnChange}
+            className={activeLink === "Body" ? "active" : ""}
+            onClick={() => handleNavClick("Body")}
+          >
+            Body
+          </li>
+          <li
+            onChange={handleOnChange}
+            className={activeLink === "Face" ? "active" : ""}
+            onClick={() => handleNavClick("Face")}
+          >
+            Face
+          </li>
+          <li
+            onChange={handleOnChange}
+            className={activeLink === "Hairs" ? "active" : ""}
+            onClick={() => handleNavClick("Hairs")}
+          >
+            Hairs
+          </li>
+          <li
+            onChange={handleOnChange}
+            className={activeLink === "Clothes" ? "active" : ""}
+            onClick={() => handleNavClick("Clothes")}
+          >
+            Clothes
+          </li>
+          <li
+            className={activeLink === "Accessories" ? "active" : ""}
+            onClick={() => handleNavClick("Accessories")}
+          >
+            Accessories
+          </li>
+        </ul>
+      </div>
+      <div className="avatar-group">
+        <div className="showing-avatar">
+          <div className="avatar-wrapper">
+            <div className="avatar">
+              <img
+                src="character/body/1.png"
+                alt=""
+                width="260"
+                style={{ zIndex: 1, position: "absolute", left: 0, top: 0 }}
+              />
+              <img
+                src="character/eyes/7.png"
+                alt=""
+                width="260"
+                style={{ zIndex: 1, position: "absolute", left: 0, top: 0 }}
+              />
+              <img
+                src="character/hair/27.png"
+                alt=""
+                width="260"
+                style={{ zIndex: 1, position: "absolute", left: 0, top: 0 }}
+              />
             </div>
-            <div className="showing-categories">
-              <div className="display-categories">
-                <h2>Earrings</h2>
-                <div id="list">
-                  {imageParts.map((partList, index) => (
-                    <div className="clickable item">
-                      <Images key={index} image={partList.key} />
-                    </div>
-                  ))}
+            <div className="text-center">
+              <button className="button">Randomize!</button>
+            </div>
+          </div>
+        </div>
+        <div className="showing-categories">
+          <div className="display-categories">
+            <h2>{showPart}</h2>
+            <div id="list">
+              {imageParts.map((partList, index) => (
+                <div className="clickable item">
+                  <Images key={index} image={partList.key} />
                 </div>
-                <div className="categories">
-                  {buttons.map((button, index) => (
-                    <button
-                      key={index}
-                      className="categories-btn"
-                      onClick={(e) => handlePartList(button)}
-                    >
-                      {button}
-                    </button>
-                  ))}
-                </div>
-              </div>
+              ))}
+            </div>
+            <div className="categories">
+              {buttons.map((button, index) => (
+                <button
+                  key={index}
+                  className="categories-btn"
+                  onClick={(e) => handlePartList(button)}
+                >
+                  {button}
+                </button>
+              ))}
             </div>
           </div>
         </div>
       </div>
-      å
     </div>
   );
 }
