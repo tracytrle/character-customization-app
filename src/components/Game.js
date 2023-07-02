@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Images from "./Images.js";
-import { allParts, total, getAllPart } from "./Items.js";
+import { total, allParts, getAllPart } from "./Items.js";
 
 // const NavLinks = ["Clothes", "Hair", "Face", "Accessories"];
 // const PartList = [
@@ -17,14 +17,18 @@ function Game() {
   const [imageParts, setImageParts] = useState([]);
   const [showPart, setShowPart] = useState("");
   const [partItems, setPartItems] = useState(allParts);
+  const [items, setItems] = useState(total);
 
   useEffect(() => {
     getAllPart();
-    console.log("print allpart: ", partItems);
-  }, [partItems]);
+    console.log("print partItems: ", partItems);
+    console.log("print allpart: ", allParts);
+    console.log("print size allpart: ", Object.keys(partItems));
+    console.log("print total: ", items);
+  }, []);
 
-  const temp = getAllPart();
-  console.log("print partItems: ", partItems);
+  // const temp = getAllPart();
+  // console.log("print partItems: ", partItems);
 
   function handleNavClick(link) {
     setActiveLink(link);
@@ -72,11 +76,11 @@ function Game() {
 
     if (activeLink === "Body" && button === "Body") {
       size = 17;
-      origin = "character/body/";
+      // origin = "character/body/";
       z_idx = 0;
     } else if (activeLink === "Hairs") {
       size = 20;
-      origin = "character/hair/";
+      // origin = "character/hair/";
       z_idx = 6;
       partName = "Hair_";
       if (button === "Hair_1") {
@@ -90,7 +94,7 @@ function Game() {
         size = 14;
       }
     } else if (activeLink === "Clothes") {
-      origin = "character/clothes/";
+      // origin = "character/clothes/";
       size = button === "layer_3" ? 9 : 5;
       origin = `${origin}${button}/`;
       z_idx = 2;
@@ -99,66 +103,57 @@ function Game() {
       if (button === "Earrings_1" || button === "Earrings_2") {
         partName = "Earrings_";
         size = 16;
-        origin = "character/accessories/earrings/";
+        // origin = "character/accessories/earrings/";
         start = button === "Earrings_1" ? 0 : 16;
       } else if (button === "Glasses") {
         size = 17;
-        origin = "character/accessories/glasses/";
+        // origin = "character/accessories/glasses/";
       } else if (button === "Hats_1" || button === "Hats_2") {
         partName = "Hat_";
         size = 14;
-        origin = "character/accessories/hats/";
+        // origin = "character/accessories/hats/";
         start = button === "Hats_1" ? 0 : 14;
       } else if (button === "Neckwear") {
         size = 18;
-        origin = "character/accessories/neckwear/";
+        // origin = "character/accessories/neckwear/";
       }
     } else if (activeLink === "Face") {
       z_idx = 4;
-      if (button === "mouths") {
-        origin = "character/mouths/";
+      if (button === "Mouths") {
+        // origin = "character/mouths/";
         size = 24;
-      } else if (button === "noses") {
-        origin = "character/noses/";
+      } else if (button === "Noses") {
+        // origin = "character/noses/";
         size = 1;
-      } else if (button === "eyes") {
-        origin = "character/eyes/";
+      } else if (button === "Eyes") {
+        // origin = "character/eyes/";
         size = 24;
-      } else if (button === "facial_hair") {
-        origin = "character/facial_hair/";
+      } else if (button === "Facial_hair") {
+        // origin = "character/facial_hair/";
         size = 17;
-      } else if (button === "eyebrows") {
-        origin = "character/eyebrows/";
+      } else if (button === "Eyebrows") {
+        // origin = "character/eyebrows/";
         size = 15;
       }
     }
-    console.log("print size: ", size);
+    // console.log("print size: ", size);
     for (let index = start; index < size + start; index++) {
       key = `${partName}${index + 1}`;
-      link = `${origin}${index + 1}${png}`;
-      let part = {
-        key: link,
-      };
-      console.log("print key: ", key);
-      console.log("print part: ", link);
+      // link = `${origin}${index + 1}${png}`;
+      // const data = partItems.find((item) => item.key === key);
+      // console.log("print data: ", data);
+      partItems.forEach((obj) => {
+        if (obj.key === key) {
+          // console.log("print obj key: ", obj.key);
 
+          // console.log("print key: ", key);
+          // console.log("print obj link: ", obj.link);
+          link = obj.link;
+        }
+      });
+      let part = { key: link };
       newImageParts.push(part);
-      // if (button === "Body") {
-      //   const eachBody = {
-      //     id: `${key}`,
-      //     src: `${link}`,
-      //     z: `${z_idx}`,
-      //   };
-      //   const newBody = { ...total };
-
-      //   setTotal((prevState) => ({
-      //     ...prevState,
-      //     Body: newBody,
-      //   }));
-      // }
     }
-    console.log("print total: ", total);
-
     setImageParts(newImageParts);
   }
 
