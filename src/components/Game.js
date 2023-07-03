@@ -1,4 +1,3 @@
-import { random } from "lodash";
 import React, { useEffect, useState, useCallback } from "react";
 import Images from "./Images.js";
 import { total, allParts, getAllPart } from "./Items.js";
@@ -15,6 +14,7 @@ function Game() {
   useEffect(() => {
     getAllPart();
     randomize();
+    showPartListsDefault("Body");
   }, []);
 
   function randomize() {
@@ -96,10 +96,13 @@ function Game() {
     let newButtons = [];
     if (link === "Face") {
       newButtons = ["Mouths", "Noses", "Eyes", "Facial_hair", "Eyebrows"];
+      showPartListsDefault("Face");
     } else if (link === "Hairs") {
       newButtons = ["Hair_1", "Hair_2", "Hair_3", "Hair_4"];
+      showPartListsDefault("Hairs");
     } else if (link === "Clothes") {
       newButtons = ["Layer_1", "Layer_2", "Layer_3"];
+      showPartListsDefault("Clothes");
     } else if (link === "Accessories") {
       newButtons = [
         "Earrings_1",
@@ -109,14 +112,71 @@ function Game() {
         "Hats_2",
         "Neckwear",
       ];
+      showPartListsDefault("Accessories");
     } else if (link === "Body") {
       newButtons = ["Body"];
+      showPartListsDefault("Body");
     }
     setButtons(newButtons);
   }
 
-  function handleOnChange(event) {
-    setActiveLink(event.target.value);
+  function showPartListsDefault(button) {
+    setShowPart(button);
+    setImageParts([]);
+
+    const newImageParts = [];
+    let start = 0;
+    let size = 0;
+    let origin = "";
+    const png = ".png";
+    let partName = `${button}_`;
+    let link = "";
+    let key = "";
+    let z_idx = 0;
+
+    if (button === "Body") {
+      size = 17;
+      // origin = "character/body/";
+      z_idx = 0;
+    } else if (button === "Hairs") {
+      size = 20;
+      partName = "Hair_";
+      // origin = "character/hair/";
+      z_idx = 6;
+    } else if (button === "Clothes") {
+      // origin = "character/clothes/layer_1";
+      size = 5;
+      z_idx = 2;
+      partName = "Layer_1_";
+    } else if (button === "Accessories") {
+      z_idx = 5;
+      size = 17;
+      partName = "Glasses_";
+      // origin = "character/accessories/glasses/";
+    } else if (button === "Face") {
+      z_idx = 4;
+      // origin = "character/mouths/";
+      size = 24;
+      partName = "Mouths_";
+    }
+    for (let index = start; index < size + start; index++) {
+      key = `${partName}${index + 1}`;
+      // link = `${origin}${index + 1}${png}`;
+      // const data = partItems.find((item) => item.key === key);
+      // console.log("print data: ", data);
+      partItems.forEach((obj) => {
+        if (obj.key === key) {
+          console.log("print obj key: ", obj.key);
+
+          console.log("print key: ", key);
+          console.log("print obj link: ", obj.link);
+          link = obj.link;
+        }
+      });
+      let part = { key, link };
+      newImageParts.push(part);
+    }
+    setImageParts(newImageParts);
   }
 
   function handlePartList(button) {
@@ -250,28 +310,24 @@ function Game() {
       <div className="nav-link">
         <ul>
           <li
-            onChange={handleOnChange}
             className={activeLink === "Body" ? "active" : ""}
             onClick={() => handleNavClick("Body")}
           >
             Body
           </li>
           <li
-            onChange={handleOnChange}
             className={activeLink === "Face" ? "active" : ""}
             onClick={() => handleNavClick("Face")}
           >
             Face
           </li>
           <li
-            onChange={handleOnChange}
             className={activeLink === "Hairs" ? "active" : ""}
             onClick={() => handleNavClick("Hairs")}
           >
             Hairs
           </li>
           <li
-            onChange={handleOnChange}
             className={activeLink === "Clothes" ? "active" : ""}
             onClick={() => handleNavClick("Clothes")}
           >
@@ -293,7 +349,7 @@ function Game() {
                 <img
                   src={item.link}
                   alt=""
-                  width={225}
+                  width={270}
                   style={{
                     zIndex: `${item.zIndex}`,
                     position: "absolute",

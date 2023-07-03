@@ -292,6 +292,7 @@ body {
   overflow-clip-margin: content-box;
   overflow: clip;
   height: 100%;
+  width: 240px;
   align-self: center;
 }
 
