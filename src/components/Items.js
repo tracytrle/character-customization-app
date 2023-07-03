@@ -77,7 +77,7 @@ export function getAllPart() {
     } else if (part === "Earrings") {
       origin = "character/accessories/earrings/";
       size = 32;
-      z_index = 4;
+      z_index = 6;
     }
     let classify =
       part === "Layer_1" || part === "Layer_2" || part === "Layer_3"
