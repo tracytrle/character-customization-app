@@ -159,10 +159,10 @@ function Game() {
   }
 
   function applyToAvatar(key) {
-    // const newList = showingParts.slice();
     console.log("print apply to ava given key: ", key);
     let link = "";
     let zIndex = 0;
+    let classify = "";
     partItems.some((obj) => {
       if (obj.key === key) {
         console.log("print obj key: ", obj.key);
@@ -172,29 +172,19 @@ function Game() {
         console.log("print obj zindex: ", obj.z_index);
         link = obj.link;
         zIndex = obj.z_index;
+        classify = obj.classify;
 
-        let part = { key, link, zIndex };
-        showingParts.push(part);
-        console.log("print obj newList: ", showingParts);
-        setShowingParts(showingParts);
+        let part = { classify, key, link, zIndex };
+        const updatedState = showingParts.filter(
+          (item) => item.classify !== classify
+        );
+        setShowingParts(updatedState);
+        setShowingParts((states) => [...states, part]);
+
         console.log("print showingParts: ", showingParts);
         return true;
       }
     });
-
-    // let part = { key, link, zIndex };
-    // if (!showingParts.some((item) => item.key === key)) {
-    //   showingParts.push(part);
-    // }
-    // showingParts.push(part);
-    // console.log("print obj newList: ", showingParts);
-    // const updateShowingParts = [...showingParts];
-    // updateShowingParts.push(part);
-    // showingParts = updateShowingParts;
-    // setShowingParts(showingParts);
-    // setShowingParts(...showingParts, part);
-
-    //   console.log("print showingParts: ", showingParts);
   }
 
   return (
@@ -244,8 +234,13 @@ function Game() {
               {showingParts.map((item) => (
                 <img
                   src={item.link}
+                  alt=""
+                  width={260}
                   style={{
-                    zIndex: `${item.z_index}`,
+                    zIndex: `${item.zIndex}`,
+                    position: "absolute",
+                    left: 0,
+                    top: 0,
                   }}
                 />
               ))}
@@ -259,7 +254,7 @@ function Game() {
           <div className="display-categories">
             <h2>{showPart}</h2>
             <div id="list">
-              {imageParts.map((partList, index) => (
+              {imageParts.map((partList) => (
                 <div
                   key={partList.key}
                   className="clickable item "

@@ -23,6 +23,7 @@ export function getAllPart() {
     let size = 0;
     let z_index = 0;
     const png = ".png";
+
     if (part === "Body") {
       origin = "character/body/";
       size = 17;
@@ -79,11 +80,15 @@ export function getAllPart() {
       size = 32;
       z_index = 4;
     }
+    let classify =
+      part === "Layer_1" || part === "Layer_2" || part === "Layer_3"
+        ? "Clothes"
+        : part;
 
     for (let index = 0; index < size; index++) {
       let key = `${part}_${index + 1}`;
       let link = `${origin}${index + 1}${png}`;
-      allParts.push({ key, link, z_index });
+      allParts.push({ key, link, classify, z_index });
     }
   }
 
