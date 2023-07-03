@@ -235,7 +235,7 @@ function Game() {
                 <img
                   src={item.link}
                   alt=""
-                  width={260}
+                  width={225}
                   style={{
                     zIndex: `${item.zIndex}`,
                     position: "absolute",

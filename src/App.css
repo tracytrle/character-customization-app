@@ -249,7 +249,7 @@ body {
   position: relative;
   display: flex;
   justify-content: center;
-  width: 260px;
+  width: 100%;
   align-items: center;
 }
 
@@ -289,13 +289,10 @@ body {
 }
 
 .avatar img {
-  width: 260px;
   overflow-clip-margin: content-box;
   overflow: clip;
-  position: absolute;
-  top: 0;
-  left: 0;
   height: 100%;
+  align-self: center;
 }
 
 /* @media screen and (max-width: 390px) and (min-height: 844px) { */
