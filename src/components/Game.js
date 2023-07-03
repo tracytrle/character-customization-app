@@ -1,15 +1,7 @@
+import { random } from "lodash";
 import React, { useEffect, useState, useCallback } from "react";
 import Images from "./Images.js";
 import { total, allParts, getAllPart } from "./Items.js";
-
-// const NavLinks = ["Clothes", "Hair", "Face", "Accessories"];
-// const PartList = [
-//   { Body: ["Body"] },
-//   { Clothes: ["layer_1", "layer_2", "layer_3"] },
-//   { Hair: ["Hair1", "Hair2", "Hair3", "Hair4"] },
-//   { Face: ["mouths", "nose", "eyes", "facial_hair", "eyebrows"] },
-//   { Accessories: ["Earrings", "Glasses", "Hats", "Neckwear"] },
-// ];
 
 function Game() {
   const [activeLink, setActiveLink] = useState("");
@@ -22,14 +14,82 @@ function Game() {
 
   useEffect(() => {
     getAllPart();
-    // console.log("print partItems: ", partItems);
-    // console.log("print allpart: ", allParts);
-    // console.log("print size allpart: ", Object.keys(partItems));
-    // console.log("print total: ", items);
+    randomize();
   }, []);
 
-  // const temp = getAllPart();
-  // console.log("print partItems: ", partItems);
+  function randomize() {
+    setShowingParts([]);
+    let noses = 1;
+    let body = Math.floor(Math.random() * items.Body) + 1;
+    let eyes = Math.floor(Math.random() * items.Eyes) + 1;
+    let mouth = Math.floor(Math.random() * items.Mouths) + 1;
+    let eyebrows = Math.floor(Math.random() * items.Eyebrows) + 1;
+    let clothes = Math.floor(Math.random() * items.Layer_1) + 1;
+    let hair = Math.floor(Math.random() * items.Hair);
+    let glasses = Math.floor(Math.random() * items.Glasses);
+    // let hat = Math.floor(Math.random() * items.Hat);
+
+    let origin = "character/";
+    let png = ".png";
+    let link = "";
+    let key = "";
+    let zIndex = "";
+    console.log("print body src: ", `${origin}body/${body}${png}`);
+
+    const parts = [
+      {
+        classify: "Body",
+        key: `Body_${body}`,
+        link: `${origin}body/${body}${png}`,
+        zIndex: "0",
+      },
+      {
+        classify: "Eyes",
+        key: `Eyes_${eyes}`,
+        link: `${origin}eyes/${eyes}${png}`,
+        zIndex: "4",
+      },
+      {
+        classify: "Noses",
+        key: `Noses_${noses}`,
+        link: `${origin}noses/${noses}${png}`,
+        zIndex: "4",
+      },
+      {
+        classify: "Mouths",
+        key: `Mouths_${mouth}`,
+        link: `${origin}mouths/${mouth}${png}`,
+        zIndex: "4",
+      },
+      {
+        classify: "Eyebrows",
+        key: `Eyebrows_${eyebrows}`,
+        link: `${origin}eyebrows/${eyebrows}${png}`,
+        zIndex: "4",
+      },
+      {
+        classify: "Hair",
+        key: `Hair_${hair}`,
+        link: `${origin}hair/${hair}${png}`,
+        zIndex: "6",
+      },
+      {
+        classify: "Clothes",
+        key: `Layer_1_${clothes}`,
+        link: `${origin}clothes/layer_1/${clothes}${png}`,
+        zIndex: "2",
+      },
+      {
+        classify: "Glasses",
+        key: `Glasses_${glasses}`,
+        link: `${origin}accessories/glasses/${glasses}${png}`,
+        zIndex: "5",
+      },
+    ];
+    parts.map((part) => {
+      setShowingParts((states) => [...states, part]);
+    });
+  }
 
   function handleNavClick(link) {
     setActiveLink(link);
@@ -52,9 +112,7 @@ function Game() {
     } else if (link === "Body") {
       newButtons = ["Body"];
     }
-
     setButtons(newButtons);
-    // console.log("print activeLink: ", activeLink);
   }
 
   function handleOnChange(event) {
@@ -64,7 +122,7 @@ function Game() {
   function handlePartList(button) {
     setShowPart(button);
     setImageParts([]);
-    // console.log("print handlePartList button: ", button);
+
     const newImageParts = [];
     let start = 0;
     let size = 0;
@@ -246,7 +304,14 @@ function Game() {
               ))}
             </div>
             <div className="text-center">
-              <button className="button">Randomize!</button>
+              <button
+                className="button"
+                onClick={() => {
+                  randomize();
+                }}
+              >
+                Randomize!
+              </button>
             </div>
           </div>
         </div>

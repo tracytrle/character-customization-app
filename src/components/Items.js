@@ -11,10 +11,10 @@ export const total = {
   Earrings: 32,
   Noses: 1,
   Neckwear: 18,
-  Facial_hair: 17,
   Layer_1: 5,
   Layer_2: 5,
   Layer_3: 9,
+  Facial_hair: 17,
 };
 
 export function getAllPart() {
