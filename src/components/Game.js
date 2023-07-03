@@ -223,7 +223,7 @@ function Game() {
   }
 
   function applyToAvatar(key) {
-    partItems.some((obj) => {
+    partItems.forEach((obj) => {
       if (obj.key === key) {
         let link = obj.link;
         let zIndex = obj.z_index;
