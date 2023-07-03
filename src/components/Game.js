@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import Images from "./Images.js";
 import { total, allParts, getAllPart } from "./Items.js";
 
@@ -18,13 +18,14 @@ function Game() {
   const [showPart, setShowPart] = useState("");
   const [partItems, setPartItems] = useState(allParts);
   const [items, setItems] = useState(total);
+  const [showingParts, setShowingParts] = useState([]);
 
   useEffect(() => {
     getAllPart();
-    console.log("print partItems: ", partItems);
-    console.log("print allpart: ", allParts);
-    console.log("print size allpart: ", Object.keys(partItems));
-    console.log("print total: ", items);
+    // console.log("print partItems: ", partItems);
+    // console.log("print allpart: ", allParts);
+    // console.log("print size allpart: ", Object.keys(partItems));
+    // console.log("print total: ", items);
   }, []);
 
   // const temp = getAllPart();
@@ -53,7 +54,7 @@ function Game() {
     }
 
     setButtons(newButtons);
-    console.log("print activeLink: ", activeLink);
+    // console.log("print activeLink: ", activeLink);
   }
 
   function handleOnChange(event) {
@@ -63,7 +64,7 @@ function Game() {
   function handlePartList(button) {
     setShowPart(button);
     setImageParts([]);
-    console.log("print handlePartList button: ", button);
+    // console.log("print handlePartList button: ", button);
     const newImageParts = [];
     let start = 0;
     let size = 0;
@@ -151,10 +152,49 @@ function Game() {
           link = obj.link;
         }
       });
-      let part = { key: link };
+      let part = { key, link };
       newImageParts.push(part);
     }
     setImageParts(newImageParts);
+  }
+
+  function applyToAvatar(key) {
+    // const newList = showingParts.slice();
+    console.log("print apply to ava given key: ", key);
+    let link = "";
+    let zIndex = 0;
+    partItems.some((obj) => {
+      if (obj.key === key) {
+        console.log("print obj key: ", obj.key);
+
+        console.log("print key: ", key);
+        console.log("print obj link: ", obj.link);
+        console.log("print obj zindex: ", obj.z_index);
+        link = obj.link;
+        zIndex = obj.z_index;
+
+        let part = { key, link, zIndex };
+        showingParts.push(part);
+        console.log("print obj newList: ", showingParts);
+        setShowingParts(showingParts);
+        console.log("print showingParts: ", showingParts);
+        return true;
+      }
+    });
+
+    // let part = { key, link, zIndex };
+    // if (!showingParts.some((item) => item.key === key)) {
+    //   showingParts.push(part);
+    // }
+    // showingParts.push(part);
+    // console.log("print obj newList: ", showingParts);
+    // const updateShowingParts = [...showingParts];
+    // updateShowingParts.push(part);
+    // showingParts = updateShowingParts;
+    // setShowingParts(showingParts);
+    // setShowingParts(...showingParts, part);
+
+    //   console.log("print showingParts: ", showingParts);
   }
 
   return (
@@ -201,24 +241,14 @@ function Game() {
         <div className="showing-avatar">
           <div className="avatar-wrapper">
             <div className="avatar">
-              <img
-                src="character/body/1.png"
-                alt=""
-                width="260"
-                style={{ zIndex: 1, position: "absolute", left: 0, top: 0 }}
-              />
-              <img
-                src="character/eyes/7.png"
-                alt=""
-                width="260"
-                style={{ zIndex: 1, position: "absolute", left: 0, top: 0 }}
-              />
-              <img
-                src="character/hair/27.png"
-                alt=""
-                width="260"
-                style={{ zIndex: 1, position: "absolute", left: 0, top: 0 }}
-              />
+              {showingParts.map((item) => (
+                <img
+                  src={item.link}
+                  style={{
+                    zIndex: `${item.z_index}`,
+                  }}
+                />
+              ))}
             </div>
             <div className="text-center">
               <button className="button">Randomize!</button>
@@ -230,8 +260,14 @@ function Game() {
             <h2>{showPart}</h2>
             <div id="list">
               {imageParts.map((partList, index) => (
-                <div className="clickable item">
-                  <Images key={index} image={partList.key} />
+                <div
+                  key={partList.key}
+                  className="clickable item "
+                  onClick={() => {
+                    applyToAvatar(partList.key);
+                  }}
+                >
+                  <Images key={partList.key} image={partList.link} />
                 </div>
               ))}
             </div>
