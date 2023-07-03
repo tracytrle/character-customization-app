@@ -6,7 +6,6 @@
 
 body {
   margin: 0;
-  /* height: auto; */
 }
 
 .container {
@@ -31,29 +30,21 @@ body {
   padding: 10px 10px;
   width: 85%;
   height: 85%;
-  /* min-height: 85%; */
-  /* max-height: auto; */
   max-height: 1200px;
   min-width: 300px;
   max-width: 1200px;
   border-radius: 20px;
   background-color: rgba(4, 0, 26, 0.96);
-  /* background-color: white; */
-
-  /* rgba(26, 0, 51, 0.84); */
 }
 
 .nav-link {
   padding: 1.5em 1em;
   height: 10%;
-  /* margin-bottom: 1em; */
   z-index: 20;
-  /* background: white; */
-  /* position: sticky; */
   width: 100%;
   top: 0;
   box-shadow: 0 0 7px 0 rgb(0 0 0 / 75%);
-  /* display: block; */
+
   display: flex;
   align-items: center;
   justify-content: row;
@@ -79,17 +70,13 @@ body {
 }
 
 .avatar-group {
-  /* position: relative; */
   display: flex;
   flex-wrap: wrap;
-
   justify-content: center;
-  /* flex-wrap: wrap; */
   font-size: 1.5rem;
   width: 100%;
   height: 90%;
   background-color: rgba(4, 0, 26, 0.96);
-  /* background-color: yellow; */
 }
 
 .showing-avatar {
@@ -105,8 +92,6 @@ body {
   background-color: #fff;
   border: 15px solid #2b304b;
   border-radius: 30px;
-  /* display: flex;
-  flex-wrap: wrap; */
   display: inline-block;
   justify-content: center;
   align-items: center;
@@ -115,10 +100,6 @@ body {
   min-width: 270px;
   height: 300px;
   min-height: 270px;
-  /* position: -webkit-sticky;
-  position: sticky;
-
-  /* top: calc(50% - 205px); */
   position: relative;
 }
 
@@ -131,14 +112,11 @@ body {
   gap: 1rem;
   display: flex;
   border-radius: 10px;
-  /* align-items: space-around; */
   align-content: center;
-  /* align-items: center; */
   background-color: #2b304b;
   z-index: 2;
   border-radius: 10px;
   margin-top: 5px;
-  /* height: auto; */
 }
 
 .categories-btn {
@@ -146,9 +124,6 @@ body {
   font-weight: bold;
   color: white;
   border-radius: 10px;
-  /* padding: 1.5em 1em; */
-  /* box-shadow: #363652; */
-  /* display: block; */
   margin-top: 0.5em;
   margin-bottom: 0.3em;
   width: 4rem;
@@ -163,9 +138,7 @@ body {
 }
 
 .showing-categories {
-  /* position: absolute; */
   margin-bottom: 0.2em;
-  /* right: 0px; */
   width: 50%;
   flex: 60%;
   min-width: 300px;
@@ -175,22 +148,18 @@ body {
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: center;
-  /* justify-content: flex-start; */
-  /* background-color: #2b304b; */
+
   background-color: transparent;
 }
 
 .display-categories {
   flex: 85%;
   display: flex;
-  /* justify-content: space-between; */
+
   flex-wrap: wrap;
   flex-direction: row;
   height: auto;
-  /* background-color: #23274c; */
   background-color: transparent;
-  /* justify-content: center; */
-  /* align-content: space-between; */
   border-radius: 10px;
   width: 85%;
   max-width: 700px;
@@ -200,7 +169,6 @@ body {
 }
 
 .display-categories h2 {
-  /* height: 10%; */
   width: 100%;
   position: absolute;
   top: 0px;
@@ -211,8 +179,6 @@ body {
   text-align: center;
 }
 .page {
-  /* position: absolute;
-  bottom: 5px; */
   padding: 5px;
 }
 
@@ -220,7 +186,6 @@ body {
   position: absolute;
   top: 50px;
   width: 100%;
-  /* background-color: rgba(255, 166, 0, 0.4); */
   border-radius: 15px;
   display: flex;
   flex-wrap: wrap;
@@ -233,7 +198,6 @@ body {
 
 .item {
   background-color: #ccc;
-  /* padding: 20px; */
   border-radius: 10px;
   box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.151);
   height: 70px;
@@ -254,15 +218,23 @@ body {
   align-items: center;
 }
 
+.avatar img {
+  overflow-clip-margin: content-box;
+  overflow: clip;
+  height: 100%;
+  width: 100%;
+  align-self: center;
+}
+
 .text-center {
   display: flex;
   justify-content: center;
+  gap: 2rem;
 
   height: 15%;
 }
 
 .button {
-  /* position: absolute; */
   background-color: #ca5119;
   border: none;
   border-radius: 15px;
@@ -289,16 +261,6 @@ body {
   transform: translate(-50%, -50%);
 }
 
-.avatar img {
-  overflow-clip-margin: content-box;
-  overflow: clip;
-  height: 100%;
-  width: 240px;
-  align-self: center;
-}
-
-/* @media screen and (max-width: 390px) and (min-height: 844px) { */
-
 @media screen and (max-width: 375px) and (min-height: 812px) {
   .container {
     width: 100%;
@@ -318,10 +280,9 @@ body {
     flex-direction: column;
   }
 
-  /* .categories {
-    flex-wrap: wrap;
-    flex-direction: row;
-  } */
+  .button {
+    height: 85%;
+  }
 
   .categories-btn {
     height: 25px;

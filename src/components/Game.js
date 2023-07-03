@@ -1,14 +1,13 @@
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState } from "react";
 import Images from "./Images.js";
-import { total, allParts, getAllPart } from "./Items.js";
+import { total, partItems, getAllPart } from "./Items.js";
+import NavLinks from "./NavLinks.js";
 
 function Game() {
   const [activeLink, setActiveLink] = useState("");
   const [buttons, setButtons] = useState([]);
   const [imageParts, setImageParts] = useState([]);
   const [showPart, setShowPart] = useState("");
-  const [partItems, setPartItems] = useState(allParts);
-  const [items, setItems] = useState(total);
   const [showingParts, setShowingParts] = useState([]);
 
   useEffect(() => {
@@ -20,20 +19,16 @@ function Game() {
   function randomize() {
     setShowingParts([]);
     let noses = 1;
-    let body = Math.floor(Math.random() * items.Body) + 1;
-    let eyes = Math.floor(Math.random() * items.Eyes) + 1;
-    let mouth = Math.floor(Math.random() * items.Mouths) + 1;
-    let eyebrows = Math.floor(Math.random() * items.Eyebrows) + 1;
-    let clothes = Math.floor(Math.random() * items.Layer_1) + 1;
-    let hair = Math.floor(Math.random() * items.Hair);
-    let glasses = Math.floor(Math.random() * items.Glasses);
+    let body = Math.floor(Math.random() * total.Body) + 1;
+    let eyes = Math.floor(Math.random() * total.Eyes) + 1;
+    let mouth = Math.floor(Math.random() * total.Mouths) + 1;
+    let eyebrows = Math.floor(Math.random() * total.Eyebrows) + 1;
+    let clothes = Math.floor(Math.random() * total.Layer_1) + 1;
+    let hair = Math.floor(Math.random() * total.Hair) + 1;
+    // let glasses = Math.floor(Math.random() * total.Glasses) + 1;
 
     let origin = "character/";
     let png = ".png";
-    let link = "";
-    let key = "";
-    let zIndex = "";
-
     const parts = [
       {
         classify: "Body",
@@ -77,16 +72,22 @@ function Game() {
         link: `${origin}clothes/layer_1/${clothes}${png}`,
         zIndex: "2",
       },
-      {
-        classify: "Glasses",
-        key: `Glasses_${glasses}`,
-        link: `${origin}accessories/glasses/${glasses}${png}`,
-        zIndex: "5",
-      },
     ];
-    parts.map((part) => {
+    parts.forEach((part) => {
       setShowingParts((states) => [...states, part]);
     });
+  }
+
+  function reset() {
+    setShowingParts([]);
+    const bodyPart = {
+      classify: "Body",
+      key: `Body_1`,
+      link: `character/body/1.png`,
+      zIndex: "0",
+    };
+
+    setShowingParts((states) => [...states, bodyPart]);
   }
 
   function handleNavClick(link) {
@@ -126,9 +127,6 @@ function Game() {
     let start = 0;
     let size = 0;
     let partName = `${button}_`;
-    let link = "";
-    let key = "";
-
     if (button === "Body") {
       size = 17;
     } else if (button === "Hairs") {
@@ -144,8 +142,10 @@ function Game() {
       size = 24;
       partName = "Mouths_";
     }
+
     for (let index = start; index < size + start; index++) {
-      key = `${partName}${index + 1}`;
+      let key = `${partName}${index + 1}`;
+      let link = "";
       partItems.forEach((obj) => {
         if (obj.key === key) {
           link = obj.link;
@@ -160,14 +160,10 @@ function Game() {
   function handlePartList(button) {
     setShowPart(button);
     setImageParts([]);
-
     const newImageParts = [];
     let start = 0;
     let size = 0;
     let partName = `${button}_`;
-    let link = "";
-    let key = "";
-
     if (activeLink === "Body" && button === "Body") {
       size = 17;
     } else if (activeLink === "Hairs") {
@@ -185,7 +181,6 @@ function Game() {
       }
     } else if (activeLink === "Clothes") {
       size = button === "layer_3" ? 9 : 5;
-      origin = `${origin}${button}/`;
     } else if (activeLink === "Accessories") {
       if (button === "Earrings_1" || button === "Earrings_2") {
         partName = "Earrings_";
@@ -214,7 +209,8 @@ function Game() {
       }
     }
     for (let index = start; index < size + start; index++) {
-      key = `${partName}${index + 1}`;
+      let key = `${partName}${index + 1}`;
+      let link = "";
       partItems.forEach((obj) => {
         if (obj.key === key) {
           link = obj.link;
@@ -227,29 +223,20 @@ function Game() {
   }
 
   function applyToAvatar(key) {
-    console.log("print apply to ava given key: ", key);
-    let link = "";
-    let zIndex = 0;
-    let classify = "";
     partItems.some((obj) => {
       if (obj.key === key) {
-        console.log("print obj key: ", obj.key);
-
-        console.log("print key: ", key);
-        console.log("print obj link: ", obj.link);
-        console.log("print obj zindex: ", obj.z_index);
-        link = obj.link;
-        zIndex = obj.z_index;
-        classify = obj.classify;
+        let link = obj.link;
+        let zIndex = obj.z_index;
+        let classify = obj.classify;
 
         let part = { classify, key, link, zIndex };
+
+        // remove duplicate
         const updatedState = showingParts.filter(
           (item) => item.classify !== classify
         );
         setShowingParts(updatedState);
         setShowingParts((states) => [...states, part]);
-
-        console.log("print showingParts: ", showingParts);
         return true;
       }
     });
@@ -259,36 +246,31 @@ function Game() {
     <div className="App">
       <div className="nav-link">
         <ul>
-          <li
-            className={activeLink === "Body" ? "active" : ""}
-            onClick={() => handleNavClick("Body")}
-          >
-            Body
-          </li>
-          <li
-            className={activeLink === "Face" ? "active" : ""}
-            onClick={() => handleNavClick("Face")}
-          >
-            Face
-          </li>
-          <li
-            className={activeLink === "Hairs" ? "active" : ""}
-            onClick={() => handleNavClick("Hairs")}
-          >
-            Hairs
-          </li>
-          <li
-            className={activeLink === "Clothes" ? "active" : ""}
-            onClick={() => handleNavClick("Clothes")}
-          >
-            Clothes
-          </li>
-          <li
-            className={activeLink === "Accessories" ? "active" : ""}
-            onClick={() => handleNavClick("Accessories")}
-          >
-            Accessories
-          </li>
+          <NavLinks
+            activeLink={activeLink}
+            link="Body"
+            handleNavClick={handleNavClick}
+          />
+          <NavLinks
+            activeLink={activeLink}
+            link="Face"
+            handleNavClick={handleNavClick}
+          />
+          <NavLinks
+            activeLink={activeLink}
+            link="Hairs"
+            handleNavClick={handleNavClick}
+          />
+          <NavLinks
+            activeLink={activeLink}
+            link="Clothes"
+            handleNavClick={handleNavClick}
+          />
+          <NavLinks
+            activeLink={activeLink}
+            link="Accessories"
+            handleNavClick={handleNavClick}
+          />
         </ul>
       </div>
       <div className="avatar-group">
@@ -317,6 +299,14 @@ function Game() {
                 }}
               >
                 Randomize!
+              </button>
+              <button
+                className="button"
+                onClick={() => {
+                  reset();
+                }}
+              >
+                Reset
               </button>
             </div>
           </div>

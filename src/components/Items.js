@@ -1,4 +1,4 @@
-export const allParts = [];
+export const partItems = [];
 export const total = {
   Body: 17,
   Eyes: 24,
@@ -6,7 +6,6 @@ export const total = {
   Mouths: 24,
   Eyebrows: 15,
   Hat: 28,
-  Eyebrows: 15,
   Glasses: 17,
   Earrings: 32,
   Noses: 1,
@@ -88,9 +87,7 @@ export function getAllPart() {
     for (let index = 0; index < size; index++) {
       let key = `${part}_${index + 1}`;
       let link = `${origin}${index + 1}${png}`;
-      allParts.push({ key, link, classify, z_index });
+      partItems.push({ key, link, classify, z_index });
     }
   }
-
-  console.log("print partItems inside Items: ", allParts);
 }
